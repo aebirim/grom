@@ -25,7 +25,7 @@ module Grom
     def statement_mapper(statement, hash)
       subject = get_id(statement.subject)
       hash[subject] ||= { :id => subject, :graph => [] }
-      hash[subject][get_id(statement.predicate).to_sym] = statement.object.to_s
+      # hash[subject][get_id(statement.predicate).to_sym] = statement.object.to_s
       hash[subject][:graph] << statement
     end
 

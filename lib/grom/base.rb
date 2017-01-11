@@ -8,13 +8,22 @@ module Grom
     extend Grom::Helpers
 
     def initialize(attributes)
-      attributes.each do |k, v|
-        translated_key = self.class.property_translator[k]
-        v = self.class.create_property_name(self.class.get_id(v)) if (v =~ URI::regexp) == 0
-        unless v.nil? || translated_key.nil?
-          instance_variable_set("@#{translated_key}", v)
+      instance_variable_set("@id", self.class.get_id(attributes.first.subject))
+      self.class.send(:attr_reader, "id")
+      attributes.each do |statement|
+        # translated_key = self.class.property_translator[k]
+        # v = self.class.create_property_name(self.class.get_id(v)) if (v =~ URI::regexp) == 0
+        # unless v.nil? || translated_key.nil?
+        #   instance_variable_set("@#{translated_key}", v)
+        #   self.class.send(:attr_reader, translated_key)
+        # end
+        translated_key = self.class.property_translator[self.class.get_id(statement.predicate).to_sym]
+        value = statement.object.to_s
+        unless value.nil? || translated_key.nil?
+          instance_variable_set("@#{translated_key}", value)
           self.class.send(:attr_reader, translated_key)
         end
+
       end
     end
 
@@ -67,7 +76,7 @@ module Grom
 
     def self.object_array_maker(ttl_data)
       create_hash_from_ttl(ttl_data).map do |hash|
-        self.new(hash)
+        self.new(hash[:graph])
       end
     end
 
