@@ -29,6 +29,10 @@ module Grom
       end
     end
 
+    def to_json
+      { key: "value" }
+    end
+
     def self.find(id)
       endpoint_url = "#{find_base_url_builder(self.name, id)}.ttl"
       ttl_data = get_ttl_data(endpoint_url)
