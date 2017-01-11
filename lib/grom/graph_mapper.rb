@@ -24,8 +24,9 @@ module Grom
 
     def statement_mapper(statement, hash)
       subject = get_id(statement.subject)
-      hash[subject] ||= { :id => subject }
+      hash[subject] ||= { :id => subject, :graph => [] }
       hash[subject][get_id(statement.predicate).to_sym] = statement.object.to_s
+      hash[subject][:graph] << statement
     end
 
     def eager_statements_mapper(ttl_data)
@@ -33,7 +34,7 @@ module Grom
       RDF::Turtle::Reader.new(ttl_data) do |reader|
         reader.each_statement do |statement|
           subject = get_id(statement.subject)
-          hash[subject] ||= {:id => subject , :graph => RDF::Graph.new}
+          hash[subject] ||= {:id => subject , :graph => []}
           predicate = get_id(statement.predicate)
           if predicate == "connect"
             (hash[subject][predicate.to_sym] ||= []) << get_id(statement.object.to_s)
