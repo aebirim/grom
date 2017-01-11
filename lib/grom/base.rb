@@ -81,13 +81,9 @@ module Grom
     end
 
     def self.object_array_maker(ttl_data)
-      array = create_hash_from_ttl(ttl_data).map do |hash|
+      create_hash_from_ttl(ttl_data).map do |hash|
         self.new(hash[:graph])
       end
-
-      p array.first
-
-      array
     end
 
     def self.object_single_maker(ttl_data)
