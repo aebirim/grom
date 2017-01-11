@@ -9,7 +9,7 @@ module Grom
 
     def initialize(attributes)
       instance_variable_set("@graph", attributes)
-      self.class.send(:attr_reader, "graph")
+      # self.class.send(:attr_reader, "graph")
       instance_variable_set("@id", self.class.get_id(attributes.first.subject))
       self.class.send(:attr_reader, "id")
       attributes.each do |statement|
